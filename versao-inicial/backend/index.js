@@ -15,6 +15,10 @@ app.use(bodyParser.json())
     .then('./api/userTest.js')
     .then('./config/routes.js')
     .into(app)
+
+    app.get('/tentativa',(req,res)=>{
+        res.send('Funcionou')
+    })
     
 
 
