@@ -1,4 +1,4 @@
-module.exports= app =>{
+
 
 
 function existOrError(value,msg){
@@ -22,6 +22,6 @@ function notExistOrError(value,msg){
 function equalsOrError(valueA,valueB,msg){
     if(valueA !==valueB) throw msg
 }
-return{existOrError,notExistOrError,equalsOrError}
 
-}
+
+module.exports={existOrError,notExistOrError,equalsOrError}

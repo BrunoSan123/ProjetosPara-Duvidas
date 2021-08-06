@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt-nodejs')
+const knex = require('../config/db')
 
-module.exports = app =>{
-    const {existOrError,notExistOrError,equalsOrError} = app.api.validator
+
+
+    const {existOrError,notExistOrError,equalsOrError} = require('./utils/validator')
     const encryptPassword =password=>{
         const salt = bcrypt.genSaltSync(10)
         return bcrypt.hashSync(password,salt)
@@ -20,8 +22,8 @@ module.exports = app =>{
             equalsOrError(user.password,user.confirmPassword,'Senhas não conferem')
             
 
-            const userFromDb = await app.db('users')
-                .where({email:user.email}).first()
+            const userFromDb = await knex('users').where({email:user.email}).first()
+                
 
             if(!user.id){
                 notExistOrError(userFromDb,'Usuario já cadastrado')
@@ -35,16 +37,17 @@ module.exports = app =>{
         user.password =encryptPassword(req.body.password)
         delete user.confirmPassword
         if(user.id){
-            app.db('users')
+            knex('users')
                 .update(user)
                 .where({id:user.id})
                 .then(_ => res.status(204).send())
                 .catch(err =>res.status(500).send(err))
         }else{
-            app.db('users')
+            knex('users')
                 .insert(user)
                 .then(_ => res.status(204).send())
                 .catch(err => res.status(500).send(err))
+                res.send('Cadastro criado com sucesso')
                 console.log(user)
 
         }
@@ -52,7 +55,7 @@ module.exports = app =>{
     }
 
     const get =(req,res) =>{
-        app.db('users')
+        knex('users')
             .select('id','name','email','admin')
             .then(users => res.json(users))
             .catch(err => res.status(500).send(err))
@@ -60,9 +63,9 @@ module.exports = app =>{
 
 
 
-    /* const getById =(req,res) =>{
+     const getById =(req,res) =>{
         
-        app.db('users')
+        knex('users')
             .select('id','name','email','admin')
             .where({id:req.params.id})
             .first()
@@ -70,7 +73,9 @@ module.exports = app =>{
             .catch(err => res.status(500).send(err))
         
       
-    }*/
+    }
 
-    return {save,get}
-}
+
+    module.exports ={save,get,getById}
+
+  
