@@ -1,5 +1,5 @@
-module.exports={
-    categoryWithChildren:`
+module.exports = {
+  categoryWithChildren: `
     
     WITH RECURSIVE subcategories (id) AS (
         SELECT id FROM  categories WHERE id = ?
@@ -8,5 +8,5 @@ module.exports={
             WHERE "parentId" =subcategories.id
     )
     SELECT id FROM subcategories
-    `
-}
+    `,
+};

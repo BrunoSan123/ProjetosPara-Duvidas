@@ -1,0 +1,4 @@
+# igore artifacts:
+
+build
+coverage
